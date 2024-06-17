@@ -1,0 +1,51 @@
+# Copyright 2024 Canonical Ltd.
+# See LICENSE-rock file for licensing details.
+---
+name: charmed-valkey  # the name of your ROCK
+base: ubuntu@22.04  # the base environment for this ROCK
+version: '7.2.5'  # just for humans. Semantic versioning is recommended
+summary: Charmed Valkey ROCK OCI  # 79 char long summary
+description: |
+  This is an OCI image that bundles Valkey together with the metrics exporter
+  in order to be used in Charmed Operators, providing automated operations 
+  management from day 0 to day 2 on Valkey, on top of a Virtual Machine cluster 
+  and K8s cluster. It is an open source, end-to-end, production ready data 
+  platform on top of cloud native technologies.
+license: Apache-2.0  # your application's SPDX license
+
+platforms:  # The platforms this ROCK should be built on and run on
+  amd64:
+
+services:
+  redis:
+    override: replace
+    startup: enabled
+    summary: Start Valkey
+    command: "valkey-server"
+  redis_exporter:
+    override: replace
+    startup: enabled
+    summary: Start Metrics Exporter
+    command: "/bin/redis_exporter"
+
+parts:
+  valkey-user:
+    plugin: nil
+    overlay-script: |
+      set -x
+      useradd -R $CRAFT_OVERLAY -M -U -r valkey
+  valkey:
+    plugin: nil
+    after:
+      - valkey-user
+    stage-snaps:
+      - charmed-valkey/latest/edge
+  redis_exporter:
+    plugin: go
+    after:
+      - valkey
+    source: https://github.com/canonical/redis_exporter.git
+    source-type: git
+    source-branch: "v1.60.0"
+    build-snaps:
+      - go/1.21/stable
