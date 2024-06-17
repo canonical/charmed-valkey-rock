@@ -31,8 +31,19 @@ services:
     user: valkey
 
 parts:
+  valkey-user:
+    plugin: nil
+    overlay-script: |
+      set -x
+      useradd -R $CRAFT_OVERLAY -M -U -r valkey
+    override-prime: |
+      craftctl default
+      mkdir $CRAFT_PRIME/var/lib/valkey
+      chown valkey $CRAFT_PRIME/var/lib/valkey
   valkey:
     plugin: nil
+    after:
+      - valkey-user
     stage-snaps:
       - charmed-valkey/latest/edge
   redis_exporter:
@@ -44,14 +55,3 @@ parts:
     source-branch: "v1.60.0"
     build-snaps:
       - go/1.21/stable
-  valkey-user:
-    plugin: nil
-    after:
-    - redis_exporter
-    overlay-script: |
-      set -x
-      useradd -R $CRAFT_OVERLAY -M -U -r valkey
-    override-prime: |
-      craftctl default
-      mkdir $CRAFT_PRIME/var/lib/valkey
-      chown valkey $CRAFT_PRIME/var/lib/valkey
