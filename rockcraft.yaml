@@ -45,7 +45,7 @@ parts:
     override-prime: |
       craftctl default
       mkdir $CRAFT_PRIME/var/lib/valkey
-      chown valkey $CRAFT_PRIME/var/lib/valkey
+      chmod 777 $CRAFT_PRIME/var/lib/valkey
   redis_exporter:
     plugin: go
     after:
