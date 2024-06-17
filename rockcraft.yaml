@@ -17,7 +17,7 @@ platforms:  # The platforms this ROCK should be built on and run on
   amd64:
 
 services:
-  redis:
+  valkey:
     override: replace
     startup: enabled
     summary: Start Valkey
