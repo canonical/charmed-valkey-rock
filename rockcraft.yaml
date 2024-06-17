@@ -36,16 +36,16 @@ parts:
     overlay-script: |
       set -x
       useradd -R $CRAFT_OVERLAY -M -U -r valkey
-    override-prime: |
-      craftctl default
-      mkdir $CRAFT_PRIME/var/lib/valkey
-      chown valkey $CRAFT_PRIME/var/lib/valkey
   valkey:
     plugin: nil
     after:
       - valkey-user
     stage-snaps:
       - charmed-valkey/latest/edge
+    override-prime: |
+      craftctl default
+      mkdir $CRAFT_PRIME/var/lib/valkey
+      chown valkey $CRAFT_PRIME/var/lib/valkey
   redis_exporter:
     plugin: go
     after:
