@@ -21,23 +21,18 @@ services:
     override: replace
     startup: enabled
     summary: Start Valkey
-    command: "valkey-server"
+    command: "valkey-server --dir /var/lib/valkey"
+    user: valkey
   redis_exporter:
     override: replace
     startup: enabled
     summary: Start Metrics Exporter
     command: "/bin/redis_exporter"
+    user: valkey
 
 parts:
-  valkey-user:
-    plugin: nil
-    overlay-script: |
-      set -x
-      useradd -R $CRAFT_OVERLAY -M -U -r valkey
   valkey:
     plugin: nil
-    after:
-      - valkey-user
     stage-snaps:
       - charmed-valkey/latest/edge
   redis_exporter:
@@ -49,3 +44,14 @@ parts:
     source-branch: "v1.60.0"
     build-snaps:
       - go/1.21/stable
+  valkey-user:
+    plugin: nil
+    after:
+    - redis_exporter
+    overlay-script: |
+      set -x
+      useradd -R $CRAFT_OVERLAY -M -U -r valkey
+    override-prime: |
+      craftctl default
+      mkdir $CRAFT_PRIME/var/lib/valkey
+      chown valkey $CRAFT_PRIME/var/lib/valkey
