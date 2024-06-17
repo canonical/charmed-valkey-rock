@@ -31,25 +31,25 @@ services:
     user: valkey
 
 parts:
-  valkey-user:
-    plugin: nil
-    overlay-script: |
-      set -x
-      useradd -R $CRAFT_OVERLAY -M -U -r valkey
   valkey:
     plugin: nil
-    after:
-      - valkey-user
     stage-snaps:
       - charmed-valkey/latest/edge
+  valkey-user:
+    plugin: nil
+    after:
+      - valkey
+    overlay-script: |
+      # Create a user in the $CRAFT_OVERLAY chroot
+      groupadd -R $CRAFT_OVERLAY -g  584788 valkey
+      useradd -R $CRAFT_OVERLAY -M -r -g valkey -u 584788 valkey
     override-prime: |
-      craftctl default
-      mkdir $CRAFT_PRIME/var/lib/valkey
-      chmod 777 $CRAFT_PRIME/var/lib/valkey
+      mkdir -p $CRAFT_PRIME/var/lib/valkey
+      chown -R 584788:584788 $CRAFT_PRIME/var/lib/valkey
   redis_exporter:
     plugin: go
     after:
-      - valkey
+      - valkey-user
     source: https://github.com/canonical/redis_exporter.git
     source-type: git
     source-branch: "v1.60.0"
