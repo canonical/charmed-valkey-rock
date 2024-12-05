@@ -24,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: valkey-rock
-          path: charmed-valkey_*_amd64.rock
+          path: valkey_*_amd64.rock
