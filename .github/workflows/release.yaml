@@ -26,9 +26,9 @@ jobs:
           sudo addgroup --system docker; sudo adduser $USER docker
           newgrp docker
           sudo snap disable docker; sudo snap enable docker
-      - name: Install skopeo
+      - name: Install rockcraft.skopeo
         run: |
-          sudo snap install --devmode --channel edge skopeo
+          sudo snap install rockcraft --classic
       - name: Install yq
         run: |
           sudo snap install yq
@@ -49,7 +49,7 @@ jobs:
           base=$(yq '(.base|split("@"))[1]' rockcraft.yaml)
           tag=${version}-${base}-${{ env.RELEASE }}
           echo "Publishing valkey:${tag}"
-          sudo skopeo --insecure-policy copy \
+          sudo rockcraft.skopeo --insecure-policy copy \
             oci-archive:valkey_${rock_image_version}_amd64.rock \
             docker-daemon:ghcr.io/canonical/valkey:${tag}
           docker push ghcr.io/canonical/valkey:${tag}

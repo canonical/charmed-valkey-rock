@@ -1,0 +1,44 @@
+name: Trivy Security Scanner
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
+  scan:
+    name: Trivy scan
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install rockcraft.skopeo
+        run: |
+          sudo snap install rockcraft --classic
+      - uses: actions/download-artifact@v3
+        with:
+          name: valkey-rock
+          path: .
+      - name: Import locally
+        run: |
+          rock_image_version=$(yq '(.version)' rockcraft.yaml)
+          sudo rockcraft.skopeo --insecure-policy copy \
+            oci-archive:valkey_${rock_image_version}_amd64.rock \
+            docker-daemon:trivy/valkey:test
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'trivy/valkey:test'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'MEDIUM,HIGH,CRITICAL'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
