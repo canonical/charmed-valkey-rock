@@ -18,7 +18,7 @@ cd charmed-valkey-rock
 sudo snap install rockcraft --edge --classic
 sudo snap install docker
 sudo snap install lxd
-sudo snap install skopeo --edge --devmode
+sudo apt-get -y update && sudo apt-get -y install skopeo
 ```
 ### Configuring Prerequisites
 ```bash
@@ -29,8 +29,8 @@ sudo lxd init --auto
 ### Packing and Running the rock
 ```bash
 rockcraft pack
-sudo skopeo --insecure-policy copy oci-archive:charmed-valkey*.rock docker-daemon:<username>/charmed-valkey:<tag>
-docker run --rm -it <username>/charmed-valkey:<tag>
+sudo skopeo --insecure-policy copy oci-archive:valkey*.rock docker-daemon:valkey:<tag>
+docker run --rm -it valkey:<tag>
 ```
 
 ## License:
