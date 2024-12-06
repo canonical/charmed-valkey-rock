@@ -1,10 +1,10 @@
 # Copyright 2024 Canonical Ltd.
 # See LICENSE-rock file for licensing details.
 ---
-name: charmed-valkey  # the name of your ROCK
+name: valkey  # the name of your ROCK
 base: ubuntu@22.04  # the base environment for this ROCK
 version: '7.2.5'  # just for humans. Semantic versioning is recommended
-summary: Charmed Valkey ROCK OCI  # 79 char long summary
+summary: Valkey ROCK OCI  # 79 char long summary
 description: |
   This is an OCI image that bundles Valkey together with the metrics exporter
   in order to be used in Charmed Operators, providing automated operations 
