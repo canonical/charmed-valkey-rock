@@ -15,9 +15,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Install skopeo
+      - name: Install rockcraft.skopeo
         run: |
-          sudo apt-get -y update && sudo apt-get -y install skopeo
+          sudo snap install rockcraft --classic
       - uses: actions/download-artifact@v3
         with:
           name: valkey-rock
@@ -25,7 +25,7 @@ jobs:
       - name: Import locally
         run: |
           rock_image_version=$(yq '(.version)' rockcraft.yaml)
-          sudo skopeo --insecure-policy copy \
+          sudo rockcraft.skopeo --insecure-policy copy \
             oci-archive:valkey_${rock_image_version}_amd64.rock \
             docker-daemon:trivy/valkey:test
 
