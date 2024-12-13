@@ -1,0 +1,83 @@
+snapcraft-version: 8.5.0
+snapcraft-started-at: '2024-12-13T10:37:07.124758Z'
+snapcraft-os-release-id: ubuntu
+snapcraft-os-release-version-id: '22.04'
+name: charmed-valkey
+version: 7.2.5
+summary: 'Valkey: open source, in memory datastore as a snap'
+description: "Valkey is an open source, in memory datastore released under \nthe BSD-3\
+  \ Clause License. It is a continuation of the work \nthat was being done on Redis\
+  \ 7.2.4.\n"
+base: core22
+grade: devel
+confinement: strict
+apps:
+  server:
+    command: usr/bin/valkey-server
+    daemon: simple
+    restart-condition: always
+    plugs:
+    - network
+    - network-bind
+    - network-observe
+    - home
+    environment:
+      LANG: C.UTF-8
+  cli:
+    command: usr/bin/valkey-cli
+    plugs:
+    - network
+    - network-bind
+    - network-observe
+    - home
+  benchmark:
+    command: usr/bin/valkey-benchmark
+    plugs:
+    - network
+    - network-bind
+    - network-observe
+    - home
+  check-aof:
+    command: usr/bin/valkey-check-aof
+    plugs:
+    - network
+    - network-bind
+    - network-observe
+    - home
+  check-rdb:
+    command: usr/bin/valkey-check-rdb
+    plugs:
+    - network
+    - network-bind
+    - network-observe
+    - home
+  sentinel:
+    command: usr/bin/valkey-sentinel
+    plugs:
+    - network
+    - network-bind
+    - network-observe
+    - home
+    environment:
+      LANG: C.UTF-8
+parts:
+  valkey:
+    build-environment:
+    - SNAPCRAFT_BUILD_INFO: 1
+    plugin: make
+    source: https://github.com/valkey-io/valkey/archive/refs/tags/7.2.5.tar.gz
+    override-build: |
+      mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr
+      make BUILD_TLS=yes
+      PREFIX=${SNAPCRAFT_PART_INSTALL}/usr make BUILD_TLS=yes install
+    build-packages:
+    - libssl-dev
+    stage-packages: []
+    stage: []
+    prime: []
+architectures:
+- amd64
+image-info: {}
+build-packages: []
+build-snaps: []
+primed-stage-packages: []
