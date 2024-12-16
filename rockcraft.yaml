@@ -55,3 +55,9 @@ parts:
     source-branch: "v1.60.0"
     build-snaps:
       - go/1.21/stable
+  add-security-manifest:
+    plugin: dump
+    source: ./usr/share/rocks
+    source-type: local
+    organize:
+      '*.yaml': usr/share/rocks/
