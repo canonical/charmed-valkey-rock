@@ -2,8 +2,8 @@
 # See LICENSE-rock file for licensing details.
 ---
 name: valkey  # the name of your ROCK
-base: ubuntu@22.04  # the base environment for this ROCK
-version: '7.2.5'  # just for humans. Semantic versioning is recommended
+base: ubuntu@24.04  # the base environment for this ROCK
+version: '7.2.7'  # just for humans. Semantic versioning is recommended
 summary: Valkey ROCK OCI  # 79 char long summary
 description: |
   This is an OCI image that bundles Valkey together with the metrics exporter
@@ -55,9 +55,11 @@ parts:
     source-branch: "v1.60.0"
     build-snaps:
       - go/1.21/stable
-  add-security-manifest:
-    plugin: dump
-    source: ./usr/share/rocks
-    source-type: local
-    organize:
-      '*.yaml': usr/share/rocks/
+  deb-security-manifest:
+    plugin: nil
+    after:
+      - redis_exporter
+    override-prime: |
+      set -x
+      mkdir -p $CRAFT_PRIME/usr/share/rocks/
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > $CRAFT_PRIME/usr/share/rocks/dpkg.query
