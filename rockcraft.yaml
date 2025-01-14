@@ -54,7 +54,7 @@ parts:
     source-type: git
     source-branch: "v1.67.0"
     build-snaps:
-      - go/1.21/stable
+      - go/1.23/stable
   deb-security-manifest:
     plugin: nil
     after:
