@@ -52,7 +52,7 @@ parts:
       - valkey-user
     source: https://github.com/canonical/redis_exporter.git
     source-type: git
-    source-branch: "v1.67.0"
+    source-branch: "v1.74.0"
     build-snaps:
       - go/1.23/stable
   deb-security-manifest:
