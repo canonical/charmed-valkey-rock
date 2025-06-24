@@ -21,7 +21,7 @@ jobs:
         run: |
           rockcraft pack
       - name: Upload locally built ROCK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: valkey-rock
           path: valkey_*_amd64.rock
