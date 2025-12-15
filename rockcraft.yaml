@@ -34,7 +34,7 @@ parts:
   valkey:
     plugin: nil
     stage-snaps:
-      - charmed-valkey/latest/edge
+      - charmed-valkey/7/edge
   valkey-user:
     plugin: nil
     after:
