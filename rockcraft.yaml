@@ -1,20 +1,22 @@
 # Copyright 2024 Canonical Ltd.
 # See LICENSE-rock file for licensing details.
 ---
-name: valkey  # the name of your ROCK
-base: ubuntu@24.04  # the base environment for this ROCK
-version: '7.2.11'  # just for humans. Semantic versioning is recommended
-summary: Valkey ROCK OCI  # 79 char long summary
+name: valkey
+base: ubuntu@26.04
+build-base: devel # to be removed once 26.04 is released to stable
+version: '9.0.1'
+summary: Valkey ROCK OCI
 description: |
   This is an OCI image that bundles Valkey together with the metrics exporter
   in order to be used in Charmed Operators, providing automated operations 
   management from day 0 to day 2 on Valkey, on top of a Virtual Machine cluster 
   and K8s cluster. It is an open source, end-to-end, production ready data 
   platform on top of cloud native technologies.
-license: Apache-2.0  # your application's SPDX license
+license: Apache-2.0
 
-platforms:  # The platforms this ROCK should be built on and run on
+platforms:
   amd64:
+  arm64:
 
 services:
   valkey:
@@ -34,7 +36,7 @@ parts:
   valkey:
     plugin: nil
     stage-snaps:
-      - charmed-valkey/latest/edge
+      - charmed-valkey/9/edge
   valkey-user:
     plugin: nil
     after:
@@ -55,11 +57,3 @@ parts:
     source-branch: "v1.74.0"
     build-snaps:
       - go/1.24/stable
-  deb-security-manifest:
-    plugin: nil
-    after:
-      - redis_exporter
-    override-prime: |
-      set -x
-      mkdir -p $CRAFT_PRIME/usr/share/rocks/
-      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > $CRAFT_PRIME/usr/share/rocks/dpkg.query
