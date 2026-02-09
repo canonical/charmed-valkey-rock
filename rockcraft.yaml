@@ -25,7 +25,7 @@ services:
     summary: Start Valkey
     command: "valkey-server --dir /var/lib/valkey"
     user: valkey
-  redis_exporter:
+  metric_exporter:
     override: replace
     startup: enabled
     summary: Start Metrics Exporter
@@ -50,7 +50,7 @@ parts:
     override-prime: |
       mkdir -p $CRAFT_PRIME/var/lib/valkey
       chown -R 584788:584788 $CRAFT_PRIME/var/lib/valkey
-  redis_exporter:
+  metric_exporter:
     plugin: go
     after:
       - valkey-user
