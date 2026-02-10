@@ -37,6 +37,8 @@ parts:
     plugin: nil
     stage-snaps:
       - charmed-valkey/9/edge
+    stage-packages:
+      - openssl
   valkey-user:
     plugin: nil
     after:
