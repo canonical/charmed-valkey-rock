@@ -4,7 +4,7 @@
 name: valkey
 base: ubuntu@26.04
 build-base: devel # to be removed once 26.04 is released to stable
-version: '9.0.1'
+version: "9.0.1"
 summary: Valkey ROCK OCI
 description: |
   This is an OCI image that bundles Valkey together with the metrics exporter
@@ -13,10 +13,11 @@ description: |
   and K8s cluster. It is an open source, end-to-end, production ready data 
   platform on top of cloud native technologies.
 license: Apache-2.0
-
 platforms:
   amd64:
   arm64:
+
+run-user: _daemon_
 
 services:
   valkey:
@@ -24,13 +25,11 @@ services:
     startup: enabled
     summary: Start Valkey
     command: "valkey-server --dir /var/lib/valkey"
-    user: valkey
   metric_exporter:
     override: replace
     startup: enabled
     summary: Start Metrics Exporter
     command: "/bin/redis_exporter"
-    user: valkey
 
 parts:
   valkey:
@@ -43,13 +42,9 @@ parts:
     plugin: nil
     after:
       - valkey
-    overlay-script: |
-      # Create a user in the $CRAFT_OVERLAY chroot
-      groupadd -R $CRAFT_OVERLAY -g  584788 valkey
-      useradd -R $CRAFT_OVERLAY -M -r -g valkey -u 584788 valkey
     override-prime: |
       mkdir -p $CRAFT_PRIME/var/lib/valkey
-      chown -R 584788:584788 $CRAFT_PRIME/var/lib/valkey
+      chown -R 584792:584792 $CRAFT_PRIME/var/lib/valkey
   metric_exporter:
     plugin: go
     after:
