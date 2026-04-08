@@ -6,22 +6,5 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Setup LXD
-        uses: canonical/setup-lxd@main
-      - name: Install dependencies
-        run: |
-          sudo snap install yq
-          sudo snap install rockcraft --classic
-      - name: Build ROCK
-        run: |
-          rockcraft pack
-      - name: Upload locally built ROCK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: valkey-rock
-          path: valkey_*_amd64.rock
+    name: Build rock
+    uses: canonical/data-platform-workflows/.github/workflows/build_rock.yaml@v42.0.1
