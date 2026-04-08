@@ -1,16 +1,22 @@
-name: Publish to GHCR
+# Copyright 2026 Canonical Ltd.
+# See LICENSE file for licensing details.
+name: Release to GHCR
 
-env:
-  RELEASE: edge
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   push:
     branches:
       - 9-26.04
+  workflow_dispatch:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yaml
+    name: Build rock
+    uses: canonical/data-platform-workflows/.github/workflows/build_rock.yaml@v42.0.1
+
   release:
     name: Release rock
     needs:
