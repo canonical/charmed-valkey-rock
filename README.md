@@ -29,8 +29,8 @@ sudo lxd init --auto
 ### Packing and Running the rock
 ```bash
 rockcraft pack
-sudo skopeo --insecure-policy copy oci-archive:valkey*.rock docker-daemon:valkey:<tag>
-docker run --rm -it valkey:<tag>
+sudo skopeo --insecure-policy copy oci-archive:charmed-valkey*.rock docker-daemon:charmed-valkey:<tag>
+docker run --rm -it charmed-valkey:<tag>
 ```
 
 ## License:
