@@ -3,7 +3,6 @@
 ---
 name: charmed-valkey
 base: ubuntu@26.04
-build-base: devel # to be removed once 26.04 is released to stable
 version: "9.0.1"
 summary: Valkey ROCK OCI
 description: |
