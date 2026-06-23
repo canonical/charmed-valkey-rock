@@ -18,6 +18,13 @@ platforms:
 
 run-user: _daemon_
 
+package-repositories:
+  - type: apt
+    components: [main]
+    suites: [resolute]
+    key-id: 6676E3F1A76ADBE4488944BF7D1A96D4BF78C79E
+    url: https://ppa.launchpadcontent.net/data-platform/prometheus-redis-exporter/ubuntu
+
 services:
   valkey:
     override: replace
@@ -28,7 +35,7 @@ services:
     override: replace
     startup: enabled
     summary: Start Metrics Exporter
-    command: "/bin/redis_exporter"
+    command: "/bin/prometheus-redis-exporter"
 
 parts:
   valkey:
@@ -37,6 +44,7 @@ parts:
       - charmed-valkey/9/edge
     stage-packages:
       - openssl
+      - prometheus-redis-exporter
   valkey-user:
     plugin: nil
     after:
@@ -44,12 +52,3 @@ parts:
     override-prime: |
       mkdir -p $CRAFT_PRIME/var/lib/valkey
       chown -R 584792:584792 $CRAFT_PRIME/var/lib/valkey
-  metric_exporter:
-    plugin: go
-    after:
-      - valkey-user
-    source: https://github.com/canonical/redis_exporter.git
-    source-type: git
-    source-branch: "v1.74.0"
-    build-snaps:
-      - go/1.25/stable
