@@ -3,7 +3,7 @@
 ---
 name: valkey  # the name of your ROCK
 base: ubuntu@24.04  # the base environment for this ROCK
-version: '7.2.11'  # just for humans. Semantic versioning is recommended
+version: '7.2.12'  # just for humans. Semantic versioning is recommended
 summary: Valkey ROCK OCI  # 79 char long summary
 description: |
   This is an OCI image that bundles Valkey together with the metrics exporter
