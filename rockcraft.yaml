@@ -52,4 +52,4 @@ parts:
     source-type: git
     source-branch: "v1.74.0"
     build-snaps:
-      - go/1.24/stable
+      - go/1.25/stable
